@@ -1,0 +1,54 @@
+@page
+@model WebApp.Pages.Game.StartGameModel
+
+
+
+@{
+    ViewData["Title"] = "Start a new game";
+}
+
+<h1>Start a game</h1>
+
+<hr/>
+<div asp-validation-summary="All" class="text-danger"></div>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-route-form="newgame">
+            <div class="form-group">
+                <label asp-for="GameOptions.GameName" class="control-label"></label>
+                <input asp-for="GameOptions.GameName" class="form-control"/>
+                <span asp-validation-for="GameOptions.GameName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GameOptions.Height" class="control-label"></label>
+                <input asp-for="GameOptions.Height" class="form-control"/>
+                <span asp-validation-for="GameOptions.Height" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GameOptions.Width" class="control-label"></label>
+                <input asp-for="GameOptions.Width" class="form-control"/>
+                <span asp-validation-for="GameOptions.Width" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GameOptions.Player1Name" class="control-label"></label>
+                <input asp-for="GameOptions.Player1Name" class="form-control"/>
+                <span asp-validation-for="GameOptions.Player1Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GameOptions.Player2Name" class="control-label"></label>
+                <input asp-for="GameOptions.Player2Name" class="form-control"/>
+                <span asp-validation-for="GameOptions.Player2Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" asp-for="GameOptions.ToDoButton" value="Human vs Human" class="btn btn-primary"/>
+                <input type="submit" asp-for="GameOptions.ToDoButton" value="AI vs Human" class="btn btn-primary"/>
+                <input type="submit" asp-for="GameOptions.ToDoButton" value="AI vs AI" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+    
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
