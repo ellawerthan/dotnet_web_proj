@@ -31,7 +31,7 @@ namespace DAL.Migrations
                     LastUpdateDt = table.Column<DateTime>(nullable: false),
                     Width = table.Column<int>(nullable: false),
                     Height = table.Column<int>(nullable: false),
-                    MoveByX = table.Column<bool>(nullable: false),
+                    MoveByB = table.Column<bool>(nullable: false),
                     HumanPlayerCount = table.Column<int>(nullable: false),
                     Player1Name = table.Column<string>(maxLength: 32, nullable: false),
                     Player2Name = table.Column<string>(maxLength: 32, nullable: false),

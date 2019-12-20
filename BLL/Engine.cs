@@ -10,8 +10,10 @@ namespace BLL
 {
     public class Engine
     {
+/*
         private bool _playerZeroMove;
-        private CellState[,] Board { get; set; }
+*/
+        private static CellState[,] Board { get; set; }
 
         private readonly AppDbContext _ctx;
 
@@ -40,7 +42,7 @@ namespace BLL
             return Board[y, x];
         }
 
-        public MoveResult Move(int posX)
+        public MoveResult Move(int posX, bool blueMove)
         {
             if (posX >= Width)
             {
@@ -57,20 +59,20 @@ namespace BLL
                 posY++;
             }
 
-            Board[posY, posX] = _playerZeroMove ? CellState.R : CellState.B;
+            Board[posY, posX] = blueMove ? CellState.R : CellState.B;
 
             if (CheckFull())
             {
                 return MoveResult.Full;
             }
 
-            if (CheckWin(posY, posX))
+            if (CheckWin())
             {
                 return MoveResult.Won;
             }
-            _playerZeroMove = !_playerZeroMove;
             return MoveResult.Success;
         }
+
 
         public void RestoreGameStateFromDb(int gameId)
         {
@@ -80,63 +82,92 @@ namespace BLL
             Width = state.Width;
         }
         
-        private bool CheckWin(int posY, int posX)
+        private bool CheckWin()
         {
-            // check diagonally left from last move
-            int diagonal_left = 0;
-            int tempY = posY;
-            int tempX = posX;
-            while (tempY >= 0 && tempX >= 0)
+            for (var y = 0; y < Height; y++)
             {
-                if (Board[posY, posX] == Board[tempY, tempX])
+                for (var x = 0; x < Width; x++)
                 {
-                    diagonal_left++;
-                    tempY--;
-                    tempX--;
-                }
-                else
-                {
-                    break;
+                    if (Board[y, x] == CellState.Empty) continue;
+                    if ((x - 1 >= 0 && Board[y, x - 1] == Board[y, x]) ||
+                        (x + 1 < Width && Board[y, x + 1] == Board[y, x]))
+                    {
+                        var connectCount = 1;
+                        var tempX = x - 1;
+                        while (tempX >= 0 && Board[y, tempX] == Board[y, x])
+                        {
+                            connectCount++;
+                            tempX--;
+                        }
+
+                        tempX = x + 1;
+                        while (tempX < Width && Board[y, tempX] == Board[y, x])
+                        {
+                            connectCount++;
+                            tempX++;
+                        }
+                        if (connectCount >= 4)
+                        {
+                            return true;
+                        }
+                    }
+
+                    if ((y - 1 >= 0 && Board[y - 1, x] == Board[y, x]) ||
+                        (y + 1 < Height && Board[y + 1, x] == Board[y, x]))
+                    {
+                        var connectCount = 1;
+                        var tempY = y - 1;
+                        while (tempY >= 0 && Board[tempY, x] == Board[y, x])
+                        {
+                            connectCount++;
+                            tempY--;
+                        }
+
+                        tempY = y + 1;
+                        while (tempY < Height && Board[tempY, x] == Board[y, x])
+                        {
+                            connectCount++;
+                            tempY++;
+                        }
+                        if (connectCount >= 4)
+                        {
+                            return true;
+                        }
+                    }
+
+                    if ((y - 1 < 0 || x - 1 < 0 || Board[y - 1, x - 1] != Board[y, x]) &&
+                        (y + 1 >= Height || x + 1 >= Width || Board[y + 1, x + 1] != Board[y, x]))
+                        continue;
+                    {
+                        var connectCount = 1;
+                        var tempY = y - 1;
+                        var tempX = x - 1;
+                        while (tempY >= 0 && tempX >= 0 && Board[tempY, tempX] == Board[y, x])
+                        {
+                            connectCount++;
+                            tempY--;
+                            tempX--;
+                        }
+
+                        tempY = y + 1;
+                        tempX = x + 1;
+                        while (tempY < Height && tempX < Width && Board[tempY, tempX] == Board[y, x])
+                        {
+                            connectCount++;
+                            tempY++;
+                            tempX++;
+                        }
+
+                        if (connectCount >= 4)
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
-            
-            // check diagonally right from last move
-            int diagonal_right = 0;
-            tempY = posY;
-            tempX = posX;
-            while (tempY >= 0 && tempX < Width)
-            {
-                if (Board[posY, posX] == Board[tempY, tempX])
-                {
-                    diagonal_right++;
-                    tempY--;
-                    tempX++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            
-            // check straight down from last move
-            int straight_down = 0;
-            tempY = posY;
-            tempX = posX;
-            while (tempY >= 0)
-            {
-                if (Board[posY, posX] == Board[tempY, tempX])
-                {
-                    straight_down++;
-                    tempY--;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            
-            return diagonal_left >= 3 || diagonal_right >= 3 || straight_down >= 3;
+            return false;
         }
+
         
         private bool CheckFull()
         {
@@ -152,6 +183,12 @@ namespace BLL
             }
 
             return true;
+        }
+        
+        public int RandomNumber(int min, int max)
+        {
+            Random random = new Random();
+            return random.Next(min, max);
         }
 
     }

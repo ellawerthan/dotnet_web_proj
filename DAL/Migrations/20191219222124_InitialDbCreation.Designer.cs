@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20191219201225_InitialDbCreation")]
+    [Migration("20191219222124_InitialDbCreation")]
     partial class InitialDbCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,7 +64,7 @@ namespace DAL.Migrations
                     b.Property<DateTime>("LastUpdateDt")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("MoveByX")
+                    b.Property<bool>("MoveByB")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Player1Name")

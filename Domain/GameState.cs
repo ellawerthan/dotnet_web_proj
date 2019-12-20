@@ -11,10 +11,7 @@ namespace Domain
         
         public int Width { get; set; } 
         public int Height { get; set; }
-
-        //todo set this up as a B/R thing and make it work.
-        public bool MoveByX { get; set; }
-
+        public bool MoveByB { get; set; }
         public int HumanPlayerCount { get; set; } 
 
         [MinLength(2)] [MaxLength(32)] public string Player1Name { get; set; } = default!;

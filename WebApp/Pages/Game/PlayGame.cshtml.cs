@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using BLL;
 using DAL;
 using Domain;
@@ -20,41 +21,51 @@ namespace WebApp.Pages.Game
         private readonly DAL.AppDbContext _context;
         public readonly Engine Engine;
         public int GameId { get; set; }
+        public bool Win { get; set; }
         
         public PlayGameModel(AppDbContext context)
         {
             _context = context;
             Engine = new Engine(_context);
         }
-
-        public async Task<ActionResult> OnGet(int? gameId, int? col)
+        public async Task<ActionResult> OnGet(int gameId, int col)
         {
-            
-            
-            if (gameId == null) {
-                return RedirectToPage("./StartGame");
-            }
-
-            GameId = gameId.Value;
-            
+            GameId = gameId;
             var state = _context.GameStates
                 .FirstOrDefault(b => b.GameStateId == GameId);
 
             Engine.RestoreGameStateFromDb(GameId);
-
-            if (col != null)
+            if (Win)
             {
-                var result = Engine.Move(col.Value);
-                var board = Engine.GetSerializedGameState();
-
-                if (result == MoveResult.Won)
+                if (state != null)
                 {
-                    if (state != null) _context.GameStates.Remove(state);
-                    _context.SaveChanges();
-                    return RedirectToPage("./Winner");
+                    _context.GameStates.Remove(state);
+                    await _context.SaveChangesAsync();
+                    Win = true;
+                    return RedirectToPage("./Winner", new {state.Player1Name, state.Player2Name, state.MoveByB});;
                 }
-                if (state != null) state.BoardStateJson = board;
+
                 _context.SaveChanges();
+            }
+            else
+            {
+                var result = Engine.Move(col, state != null && state.MoveByB);
+                    var board = Engine.GetSerializedGameState();
+                    if (state != null) state.BoardStateJson = board;
+                    if (state != null) state.MoveByB = !state.MoveByB;
+                    if (state != null && state.HumanPlayerCount == 1)
+                    {
+                        result = Engine.Move(Engine.RandomNumber(0, state.Width - 1), state.MoveByB);
+                        board = Engine.GetSerializedGameState();
+                        state.BoardStateJson = board;
+                        state.MoveByB = !state.MoveByB;
+                        _context.SaveChanges();
+                    }
+                    _context.SaveChanges();
+                    if (result == MoveResult.Won)
+                    {
+                        Win = true;
+                    }
             }
 
             return Page();

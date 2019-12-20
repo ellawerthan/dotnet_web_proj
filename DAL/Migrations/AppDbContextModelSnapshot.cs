@@ -62,7 +62,7 @@ namespace DAL.Migrations
                     b.Property<DateTime>("LastUpdateDt")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("MoveByX")
+                    b.Property<bool>("MoveByB")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Player1Name")

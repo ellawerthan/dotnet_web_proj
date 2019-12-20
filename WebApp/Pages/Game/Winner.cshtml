@@ -1,4 +1,5 @@
 @page
+@using Domain
 @model WebApp.Pages.Game.Winner
 
 @{
@@ -13,7 +14,23 @@
 </head>
 <body>
 <div>
-    
+    <h1>@GetWinnerName() is the winner!</h1>
 </div>
 </body>
 </html>
+@functions
+{
+
+    string GetWinnerName()
+    {
+        if (Model.Winning_move)
+        {
+            return Model.P1name;
+        }
+        else
+        {
+            return Model.P2name;
+        }
+    }
+
+}

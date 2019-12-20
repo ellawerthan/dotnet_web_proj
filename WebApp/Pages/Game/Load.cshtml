@@ -1,0 +1,30 @@
+@page
+@using Domain
+@using SQLitePCL
+@model WebApp.Pages.Game.Load
+
+@functions {
+    public List<GameState> GameList { get; set; }
+}
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>LOAD</title>
+</head>
+<body>
+<div>
+    <form method="post">
+    @foreach(var game in Load._context.GameStates)
+    {
+        <input type="submit" asp-for="Selection.GameName" value="@game.GameName" class="btn btn-primary"/>
+    }
+    </form>
+</div>
+</body>
+</html>

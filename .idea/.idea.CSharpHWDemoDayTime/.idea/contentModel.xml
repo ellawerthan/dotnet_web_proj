@@ -17,6 +17,9 @@
       <e p="ConsoleApp" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
         <e p="ConsoleApp.csproj" t="IncludeRecursive" />
+        <e p="ConsoleUI.cs" t="Include" />
+        <e p="MenuItem.cs" t="Include" />
+        <e p="MenuSystem.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.0" t="Include">
@@ -32,8 +35,8 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="DAL.csproj" t="IncludeRecursive" />
         <e p="Migrations" t="Include">
-          <e p="20191219201225_InitialDbCreation.cs" t="Include" />
-          <e p="20191219201225_InitialDbCreation.Designer.cs" t="Include" />
+          <e p="20191219222124_InitialDbCreation.cs" t="Include" />
+          <e p="20191219222124_InitialDbCreation.Designer.cs" t="Include" />
           <e p="AppDbContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
@@ -76,6 +79,8 @@
           <e p="Error.cshtml" t="Include" />
           <e p="Error.cshtml.cs" t="Include" />
           <e p="Game" t="Include">
+            <e p="Load.cshtml" t="Include" />
+            <e p="Load.cshtml.cs" t="Include" />
             <e p="PlayGame.cshtml" t="Include" />
             <e p="PlayGame.cshtml.cs" t="Include" />
             <e p="StartGame.cshtml" t="Include" />

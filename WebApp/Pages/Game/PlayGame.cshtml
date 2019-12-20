@@ -1,38 +1,51 @@
 @page
+@using System.Diagnostics.Eventing.Reader
 @using BLL
 @model WebApp.Pages.Game.PlayGameModel
 
+@if (!Model.Win)
+{
+    <table class="table table-dark" style="width: initial;">
 
-<table class="table table-dark" style="width: initial;">
-
-    <thead>
-    <tr>
-        <th></th>
-        @for (var x = 0; x < Model.Engine.Width; x++)
-        {
-            <th>
-                @x
-            </th>
-        }
-    </tr>
-    </thead>
-
-
-    <tbody>
-    @for (var y = 0; y < Model.Engine.Height; y++)
-    {
+        <thead>
         <tr>
-            <td>@y</td>
+            <th></th>
             @for (var x = 0; x < Model.Engine.Width; x++)
             {
-                <td>
-                    <a asp-page="./PlayGame" asp-route-gameId="@Model.GameId" asp-route-col="@x" asp-route-row="@y" class="btn btn-secondary btn-info">@Html.Raw(GetGameButtonLabel(Model.Engine.GetBoardCellValue(y, x)))</a>
-                </td>
+                <th>
+                    @x
+                </th>
             }
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+
+
+        <tbody>
+
+        @for (var y = 0; y < Model.Engine.Height; y++)
+        {
+            <tr>
+                <td>@y</td>
+
+                @for (var x = 0; x < Model.Engine.Width; x++)
+                {
+                    <td>
+                        <a asp-page="./PlayGame" asp-route-gameId="@Model.GameId" asp-route-col="@x" asp-route-row="@y" class="btn btn-secondary btn-info">@Html.Raw(GetGameButtonLabel(Model.Engine.GetBoardCellValue(y, x)))</a>
+                    </td>
+                }
+            </tr>
+        }
+        
+        </tbody>
+    </table>
+}
+@if (Model.Win)
+{
+    <div>
+        <p>Winner!</p>
+    </div>
+}
+
     
 
 @functions

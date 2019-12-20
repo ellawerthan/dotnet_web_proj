@@ -12,7 +12,7 @@ namespace WebApp
     public class Program
     {
 
-        public static IHost WebHost;
+        public static IHost? WebHost;
         public static void Main(string[] args)
         {
             WebHost = CreateHostBuilder(args).Build();

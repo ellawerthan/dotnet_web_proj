@@ -73,7 +73,7 @@ namespace WebApp.Pages.Game
         [MinLength(2)] [MaxLength(32)] public string GameName { get; set; } = default!;
         public int Width { get; set; } = 7;
         public int Height { get; set; } = 7;
-        public string ToDoButton { get; set; }
+        public string? ToDoButton { get; set; }
         
         [MinLength(2)] [MaxLength(32)] public string Player1Name { get; set; } = "Player1";
         [MinLength(2)] [MaxLength(32)] public string Player2Name { get; set; } = "Player2";
